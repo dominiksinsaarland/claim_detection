@@ -57,7 +57,7 @@ except:
 
 print (len(all_dev_set), len(dev_fns))
 for examples, dev_fn in zip(all_dev_set, dev_fns):
-	predicted = text_clf.predict([x[0] for x in examples])
+	predicted = text_clf.decision_function([x[0] for x in examples])
 	i = 1
 	with open(os.path.join(outpath, dev_fn), "w") as outfile:
 		for pred in predicted:
