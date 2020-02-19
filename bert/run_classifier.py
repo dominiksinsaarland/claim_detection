@@ -269,7 +269,7 @@ class CLEF2019Processor(DataProcessor):
       guid = "%s-%s" % (set_type, tokenization.convert_to_unicode(line[0]))
       text_a = tokenization.convert_to_unicode(line[0])
       text_b = None
-      label = tokenization.convert_to_unicode(line[1])
+      label = int(tokenization.convert_to_unicode(line[1]))
       examples.append(
           InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
     return examples
