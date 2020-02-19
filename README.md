@@ -8,8 +8,8 @@ working repo for claim detection
 * Create a Python Environment and activate it:
 ```bash 
 conda create -n claim_spotting python=3.6
-source activate claim_spotting
-pip install requirements.txt
+conda activate claim_spotting
+pip install -r requirements.txt
 ```
 
 
