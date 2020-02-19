@@ -273,6 +273,10 @@ class CLEF2019Processor(DataProcessor):
           InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
     return examples
   
+  def get_labels(self):
+    """See base class."""
+    return [0,1]
+
 
 
 
@@ -616,11 +620,11 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
   hidden_size = output_layer.shape[-1].value
 
   output_weights = tf.get_variable(
-      "output_weights", [num_labels, hidden_size],
+      "output_weights", [1, hidden_size],
       initializer=tf.truncated_normal_initializer(stddev=0.02))
 
   output_bias = tf.get_variable(
-      "output_bias", [num_labels], initializer=tf.zeros_initializer())
+      "output_bias", [1], initializer=tf.zeros_initializer())
 
   with tf.variable_scope("loss"):
     if is_training:
@@ -629,13 +633,18 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
 
     logits = tf.matmul(output_layer, output_weights, transpose_b=True)
     logits = tf.nn.bias_add(logits, output_bias)
-    probabilities = tf.nn.softmax(logits, axis=-1)
-    log_probs = tf.nn.log_softmax(logits, axis=-1)
+    #probabilities = tf.nn.softmax(logits, axis=-1)
+    #log_probs = tf.nn.log_softmax(logits, axis=-1)
+    labels = tf.expand_dims(tf.cast(labels, tf.float32), axis=-1)
+    print (labels.get_shape)     
+    print (logits.get_shape())
+    loss = tf.losses.hinge_loss(labels, logits)
+    probabilities = logits
+    per_example_loss = 0
+    #one_hot_labels = tf.one_hot(labels, depth=num_labels, dtype=tf.float32)
 
-    one_hot_labels = tf.one_hot(labels, depth=num_labels, dtype=tf.float32)
-
-    per_example_loss = -tf.reduce_sum(one_hot_labels * log_probs, axis=-1)
-    loss = tf.reduce_mean(per_example_loss)
+    #per_example_loss = -tf.reduce_sum(one_hot_labels * log_probs, axis=-1)
+    #loss = tf.reduce_mean(per_example_loss)
 
     return (loss, per_example_loss, logits, probabilities)
 
@@ -812,7 +821,7 @@ def main(_):
       "mnli": MnliProcessor,
       "mrpc": MrpcProcessor,
       "xnli": XnliProcessor,
-      "clef2019": CLEF2019Processor,
+      "clefg2019": CLEF2019Processor,
   }
 
   tokenization.validate_case_matches_checkpoint(FLAGS.do_lower_case,
