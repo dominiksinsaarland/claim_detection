@@ -812,7 +812,7 @@ def main(_):
       "mnli": MnliProcessor,
       "mrpc": MrpcProcessor,
       "xnli": XnliProcessor,
-      "CLEF2019": CLEF2019Processor,
+      "clef2019": CLEF2019Processor,
   }
 
   tokenization.validate_case_matches_checkpoint(FLAGS.do_lower_case,
