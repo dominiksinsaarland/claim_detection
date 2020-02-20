@@ -21,7 +21,7 @@ if __name__ == "__main__":
 		for sentence, label in train:
 			outfile.write(sentence + "\t" + str(label) + "\n")
 
-	with open("dev_clef_2019.txt", "w") as outfile:
+	with open(os.path.join(path_outfiles, "dev.txt"), "w") as outfile:
 		for sentence, label in dev:
 			outfile.write(sentence + "\t" + str(label) + "\n")
 
@@ -41,7 +41,7 @@ if __name__ == "__main__":
 	# bsub -n 1 -R "rusage[mem=12800,ngpus_excl_p=1]" python test.py 
 
 	# get bert input
-	# bsub -W 2 -n 1 -R "rusage[mem=4096,scratch=8192]" -B -N python get_bert_input_files.py
+	# bsub -W 2 -n 1 -R "rusage[mem=4096,scratch=8192]" python get_bert_input_files.py
 
 
 
