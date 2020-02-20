@@ -1,6 +1,6 @@
 BERT_BASE_DIR="bert_model/cased_L-12_H-768_A-12"
 DATA_DIR="bert_input_files"
-OUTPUT_DIR="BERT_CLEF2019"
+OUTPUT_DIR="BERT_CLEF2019_AND_CLAIMBUSTER"
 BERT_SCRIPTS="bert"
 
 fns="20161019_3pres.tsv 20160414_9dem.tsv 20180916_trump_miami.tsv 20170928_trump_tax.tsv 20182601_trump_world.tsv 20160722_trump_acceptance.tsv 20170228_trump_address.tsv"
