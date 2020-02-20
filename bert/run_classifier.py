@@ -37,6 +37,17 @@ flags.DEFINE_string(
     "for the task.")
 
 flags.DEFINE_string(
+    "file_to_predict", None,
+    "The file to predict. Should be a .tsv files"
+    "for the task.")
+
+flags.DEFINE_string(
+    "file_with_predictions", None,
+    "The file in which predictions are saved "
+    "for the task.")
+
+
+flags.DEFINE_string(
     "bert_config_file", None,
     "The config json file corresponding to the pre-trained BERT model. "
     "This specifies the model architecture.")
@@ -273,6 +284,17 @@ class CLEF2019Processor(DataProcessor):
       examples.append(
           InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
     return examples
+
+  def get_test_examples(self, data_dir):
+    """See base class."""
+    if FLAGS.file_to_predict is not None:
+      return self._create_examples(
+        self._read_tsv(os.path.join(data_dir, FLAGS.file_to_predict)), "test")
+
+    else:
+      return self._create_examples(
+        self._read_tsv(os.path.join(data_dir, "test_matched.tsv")), "test")
+
   
   def get_labels(self):
     """See base class."""
@@ -990,8 +1012,10 @@ def main(_):
         drop_remainder=predict_drop_remainder)
 
     result = estimator.predict(input_fn=predict_input_fn)
-
-    output_predict_file = os.path.join(FLAGS.output_dir, "test_results.tsv")
+    if FLAGS.file_with_predictions is not None:
+      output_predict_file = os.path.join(FLAGS.output_dir, FLAGS.file_with_predictions)
+    else:
+      output_predict_file = os.path.join(FLAGS.output_dir, "test_results.tsv")
     with tf.gfile.GFile(output_predict_file, "w") as writer:
       num_written_lines = 0
       tf.logging.info("***** Predict results *****")
