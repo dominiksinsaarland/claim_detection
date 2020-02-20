@@ -3,6 +3,7 @@ DATA_DIR="bert_input_files"
 OUTPUT_DIR="BERT_CLEF2019_AND_CLAIMBUSTER"
 BERT_SCRIPTS="bert"
 
+: <<'END'
 fns="20161019_3pres.tsv 20160414_9dem.tsv 20180916_trump_miami.tsv 20170928_trump_tax.tsv 20182601_trump_world.tsv 20160722_trump_acceptance.tsv 20170228_trump_address.tsv"
 for fn in $fns
 do
@@ -29,8 +30,9 @@ done
 echo "job finished"
 # bsub -n 1 -R "rusage[mem=12800,ngpus_excl_p=1]" bash eval_bert.sh
 
+END
 cd clef2019-factchecking-task1/
-PYTHONPATH="." python3 scorer/main.py --gold_file_path="data/training/20161019_3pres.tsv,data/training/20160414_9dem.tsv,data/training/20180916_trump_miami.tsv,data/training/20170928_trump_tax.tsv,data/training/20182601_trump_world.tsv,data/training/20160722_trump_acceptance.tsv,data/training/20170228_trump_address.tsv" --pred_file_path="../BERT_CLEF2019/20161019_3pres.tsv,../BERT_CLEF2019/20160414_9dem.tsv,../BERT_CLEF2019/20180916_trump_miami.tsv,../BERT_CLEF2019/20170928_trump_tax.tsv,../BERT_CLEF2019/20182601_trump_world.tsv,../BERT_CLEF2019/20160722_trump_acceptance.tsv,../BERT_CLEF2019/20170228_trump_address.tsv" 
+PYTHONPATH="." python3 scorer/main.py --gold_file_path="data/training/20161019_3pres.tsv,data/training/20160414_9dem.tsv,data/training/20180916_trump_miami.tsv,data/training/20170928_trump_tax.tsv,data/training/20182601_trump_world.tsv,data/training/20160722_trump_acceptance.tsv,data/training/20170228_trump_address.tsv" --pred_file_path="../BERT_CLEF2019_AND_CLAIMBUSTER/20161019_3pres.tsv,../BERT_CLEF2019_AND_CLAIMBUSTER/20160414_9dem.tsv,../BERT_CLEF2019_AND_CLAIMBUSTER/20180916_trump_miami.tsv,../BERT_CLEF2019_AND_CLAIMBUSTER/20170928_trump_tax.tsv,../BERT_CLEF2019_AND_CLAIMBUSTER/20182601_trump_world.tsv,../BERT_CLEF2019_AND_CLAIMBUSTER/20160722_trump_acceptance.tsv,../BERT_CLEF2019_AND_CLAIMBUSTER/20170228_trump_address.tsv" 
 cd ..
 
 
