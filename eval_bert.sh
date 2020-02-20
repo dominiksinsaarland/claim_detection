@@ -24,14 +24,10 @@ PYTHONPATH=$BERT_SCRIPTS python $BERT_SCRIPTS"/run_classifier.py" \
   --num_train_epochs=3.0 \
   --do_lower_case=False \
   --output_dir=$OUTPUT_DIR
+python postprocess.py $fn $OUTPUT_DIR
 done
 echo "job finished"
 # bsub -n 1 -R "rusage[mem=12800,ngpus_excl_p=1]" bash eval_bert.sh
-
-for fn in $fns
-do
-python postprocess.py $fn $OUTPUT_DIR
-done
 
 cd clef2019-factchecking-task1/
 PYTHONPATH="." python3 scorer/main.py --gold_file_path="data/training/20161019_3pres.tsv,data/training/20160414_9dem.tsv,data/training/20180916_trump_miami.tsv,data/training/20170928_trump_tax.tsv,data/training/20182601_trump_world.tsv,data/training/20160722_trump_acceptance.tsv,data/training/20170228_trump_address.tsv" --pred_file_path="../BERT_CLEF2019/20161019_3pres.tsv,../BERT_CLEF2019/20160414_9dem.tsv,../BERT_CLEF2019/20180916_trump_miami.tsv,../BERT_CLEF2019/20170928_trump_tax.tsv,../BERT_CLEF2019/20182601_trump_world.tsv,../BERT_CLEF2019/20160722_trump_acceptance.tsv,../BERT_CLEF2019/20170228_trump_address.tsv" 
