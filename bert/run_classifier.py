@@ -43,6 +43,11 @@ flags.DEFINE_string(
     "for the task.")
 
 flags.DEFINE_string(
+    "train_file", None,
+    "The file to predict. Should be a .tsv files"
+    "for the task.")
+
+flags.DEFINE_string(
     "file_with_predictions", None,
     "The file in which predictions are saved "
     "for the task.")
@@ -266,8 +271,13 @@ class XnliProcessor(DataProcessor):
 
 class CLEF2019Processor(DataProcessor):
   def get_train_examples(self, data_dir):
-    examples=  self._create_examples(
+    if FLAGS.train_file is not None:
+      examples=  self._create_examples(
+        self._read_tsv(os.path.join(data_dir, FLAGS.train_file)), "train")
+    else:
+      examples=  self._create_examples(
         self._read_tsv(os.path.join(data_dir, "train.tsv")), "train")
+
     random.shuffle(examples)
     return examples
   def get_dev_examples(self, data_dir):
@@ -283,7 +293,14 @@ class CLEF2019Processor(DataProcessor):
       guid = "%s-%s" % (set_type, tokenization.convert_to_unicode(line[0]))
       text_a = tokenization.convert_to_unicode(line[0])
       text_b = None
-      label = int(tokenization.convert_to_unicode(line[1]))
+      if FLAGS.train_file is not None:
+        label = float(line[1])
+        if label > 0.5:
+          label = 1
+        else:
+          label = 0
+      else:
+        label = int(tokenization.convert_to_unicode(line[1]))
       examples.append(
           InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
     return examples
