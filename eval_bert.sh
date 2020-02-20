@@ -7,23 +7,23 @@ fns="20161019_3pres.tsv 20160414_9dem.tsv 20180916_trump_miami.tsv 20170928_trum
 for fn in $fns
 do
 echo $fn
-#PYTHONPATH=$BERT_SCRIPTS python $BERT_SCRIPTS"/run_classifier.py" \
-#  --task_name=CLEF2019 \
-#  --do_train=false \
-#  --do_eval=false \
-#  --do_predict=true \
-#  --file_to_predict=$fn \
-#  --file_with_predictions=$fn \
-#  --data_dir=$DATA_DIR \
-#  --vocab_file=$BERT_BASE_DIR/vocab.txt \
-#  --bert_config_file=$BERT_BASE_DIR/bert_config.json \
-#  --init_checkpoint=$BERT_BASE_DIR/bert_model.ckpt \
-#  --max_seq_length=128 \
-#  --train_batch_size=32 \
-#  --learning_rate=2e-5 \
-#  --num_train_epochs=3.0 \
-#  --do_lower_case=False \
-#  --output_dir=$OUTPUT_DIR
+PYTHONPATH=$BERT_SCRIPTS python $BERT_SCRIPTS"/run_classifier.py" \
+  --task_name=CLEF2019 \
+  --do_train=false \
+  --do_eval=false \
+  --do_predict=true \
+  --file_to_predict=$fn \
+  --file_with_predictions=$fn \
+  --data_dir=$DATA_DIR \
+  --vocab_file=$BERT_BASE_DIR/vocab.txt \
+  --bert_config_file=$BERT_BASE_DIR/bert_config.json \
+  --init_checkpoint=$BERT_BASE_DIR/bert_model.ckpt \
+  --max_seq_length=128 \
+  --train_batch_size=32 \
+  --learning_rate=2e-5 \
+  --num_train_epochs=3.0 \
+  --do_lower_case=False \
+  --output_dir=$OUTPUT_DIR
 done
 echo "job finished"
 # bsub -n 1 -R "rusage[mem=12800,ngpus_excl_p=1]" bash eval_bert.sh
